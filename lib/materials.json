@@ -1,0 +1,38 @@
+{
+  "pipeRates": {
+    "copper": 55,
+    "pex": 35,
+    "stainless": 75,
+    "plastic": 25
+  },
+  "radiatorCosts": {
+    "standard": 150,
+    "compact": 200,
+    "premium": 280,
+    "designer": 450
+  },
+  "cylinderCosts": {
+    "base": {
+      "150": 600,
+      "200": 750,
+      "250": 900,
+      "300": 1100,
+      "400": 1400
+    },
+    "typeMultiplier": {
+      "unvented": 1.0,
+      "vented": 0.8,
+      "thermal_store": 1.3
+    }
+  },
+  "controlSystems": {
+    "base": {
+      "basic": 300,
+      "weather_comp": 600,
+      "smart_home": 900,
+      "zone_control": 1200
+    },
+    "includedZones": 2,
+    "extraZoneFee": 150
+  }
+}

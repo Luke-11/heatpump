@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Air-to-Water Heat Pump Quoting Tool</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- <link rel="stylesheet" href="style_tiles.css" /> -->
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- ========================================
+             HEADER SECTION
+             Customize company name and tagline here
+             ======================================== -->
+      <div class="header">
+        <h1>Air-to-Water Heat Pump Quoting Tool</h1>
+        <p>
+          Professional installation cost calculator with materials and
+          comprehensive services
+        </p>
+      </div>
+
+      <div class="main-content">
+        <!-- ========================================
+                 SYSTEM CONFIGURATION
+                 ======================================== -->
+        <div class="nav-buttons">
+          <a class="nav-button" href="./lib/materials-table.html"
+            >View Materials Data</a
+          >
+        </div>
+        <div class="section">
+          <h2 class="section-title">System Configuration</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="heatPumpCapacity">Heat Pump Capacity (kW)</label>
+              <input
+                type="number"
+                id="heatPumpCapacity"
+                value="12"
+                min="6"
+                max="50"
+                step="0.5"
+              />
+            </div>
+            <div class="form-group">
+              <label for="systemType">System Type</label>
+              <select id="systemType">
+                <option value="monobloc">Monobloc</option>
+                <option value="split">Split System</option>
+                <option value="cascade">Cascade System</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bufferTankSize">Buffer Tank Size (L)</label>
+              <input
+                type="number"
+                id="bufferTankSize"
+                value="300"
+                min="100"
+                max="1000"
+                step="50"
+              />
+            </div>
+            <div class="form-group">
+              <label for="installationComplexity"
+                >Installation Complexity</label
+              >
+              <select id="installationComplexity">
+                <option value="standard">Standard</option>
+                <option value="complex">Complex</option>
+                <option value="very_complex">Very Complex</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 PIPING MATERIALS & INSTALLATION
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Piping Materials & Installation</h2>
+
+          <!-- Primary Circuit -->
+          <div class="subsection">
+            <h3>Primary Circuit Piping</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="primaryPiping">Distance (meters)</label>
+                <input
+                  type="number"
+                  id="primaryPiping"
+                  value="15"
+                  min="1"
+                  max="100"
+                  step="0.5"
+                />
+              </div>
+              <div class="form-group">
+                <label for="primaryPipeMaterial">Pipe Material</label>
+                <select id="primaryPipeMaterial">
+                  <option value="copper">Copper</option>
+                  <option value="pex">PEX-AL-PEX</option>
+                  <option value="stainless">Stainless Steel</option>
+                  <option value="plastic">Plastic (MDPE)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="primaryPipeSize">Pipe Size</label>
+                <select id="primaryPipeSize">
+                  <option value="22mm">22mm</option>
+                  <option value="28mm">28mm</option>
+                  <option value="35mm">35mm</option>
+                  <option value="42mm">42mm</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Primary Circuit subtotal -->
+            <div class="subsection-total">
+              <span>Primary Circuit Subtotal:</span>
+              <span id="primaryCircuitTotal" class="subtotal-value">£0</span>
+            </div>
+          </div>
+
+          <!-- Secondary Circuit -->
+          <div class="subsection">
+            <h3>Secondary Circuit Piping</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="secondaryPiping">Distance (meters)</label>
+                <input
+                  type="number"
+                  id="secondaryPiping"
+                  value="25"
+                  min="1"
+                  max="200"
+                  step="0.5"
+                />
+              </div>
+              <div class="form-group">
+                <label for="secondaryPipeMaterial">Pipe Material</label>
+                <select id="secondaryPipeMaterial">
+                  <option value="copper">Copper</option>
+                  <option value="pex">PEX-AL-PEX</option>
+                  <option value="stainless">Stainless Steel</option>
+                  <option value="plastic">Plastic (MDPE)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="secondaryPipeSize">Pipe Size</label>
+                <select id="secondaryPipeSize">
+                  <option value="15mm">15mm</option>
+                  <option value="22mm">22mm</option>
+                  <option value="28mm">28mm</option>
+                  <option value="35mm">35mm</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Secondary Circuit subtotal -->
+            <div class="subsection-total">
+              <span>Secondary Circuit Subtotal:</span>
+              <span id="secondaryCircuitTotal" class="subtotal-value">£0</span>
+            </div>
+          </div>
+
+          <!-- Other Installation Distances -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="condensateDrain">Condensate Drain (meters)</label>
+              <input
+                type="number"
+                id="condensateDrain"
+                value="5"
+                min="1"
+                max="50"
+                step="0.5"
+              />
+            </div>
+            <div class="form-group">
+              <label for="electricalCabling">Electrical Cabling (meters)</label>
+              <input
+                type="number"
+                id="electricalCabling"
+                value="20"
+                min="1"
+                max="100"
+                step="0.5"
+              />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <!-- ...existing condensate and electrical inputs... -->
+          </div>
+
+          <!-- Add these subtotal divs -->
+          <div class="subsection-total">
+            <span>Drainage Work Subtotal:</span>
+            <span id="drainageTotal" class="subtotal-value">£0</span>
+          </div>
+          <div class="subsection-total">
+            <span>Electrical Work Subtotal:</span>
+            <span id="electricalTotal" class="subtotal-value">£0</span>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 FLOOR WORK & ACCESS
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Floor Work & Access</h2>
+          <div class="checkbox-group">
+            <input type="checkbox" id="includeFloorWork" />
+            <label for="includeFloorWork"
+              >Include floor board lifting and replacement</label
+            >
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="floorAreaLifted"
+                >Floor Area to Lift (sq meters)</label
+              >
+              <input
+                type="number"
+                id="floorAreaLifted"
+                value="10"
+                min="1"
+                max="100"
+                step="0.5"
+              />
+            </div>
+            <div class="form-group">
+              <label for="floorType">Floor Type</label>
+              <select id="floorType">
+                <option value="timber">Timber Floorboards</option>
+                <option value="chipboard">Chipboard/OSB</option>
+                <option value="engineered">Engineered Wood</option>
+                <option value="laminate">Laminate</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="subsection-total">
+            <span>Floor Work Subtotal:</span>
+            <span id="floorWorkTotal" class="subtotal-value">£0</span>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 RADIATOR INSTALLATION
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Radiator Installation</h2>
+          <div class="checkbox-group">
+            <input type="checkbox" id="includeRadiators" />
+            <label for="includeRadiators"
+              >Include new radiator installation</label
+            >
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="numRadiators">Number of Radiators</label>
+              <input
+                type="number"
+                id="numRadiators"
+                value="8"
+                min="1"
+                max="30"
+                step="1"
+              />
+            </div>
+            <div class="form-group">
+              <label for="radiatorType">Radiator Type</label>
+              <select id="radiatorType">
+                <option value="standard">Standard Panel (Type 11/21)</option>
+                <option value="compact">Compact Panel (Type 22)</option>
+                <option value="premium">Premium Panel (Type 33)</option>
+                <option value="designer">Designer/Column</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="trvInstall">Thermostatic Radiator Valves</label>
+              <select id="trvInstall">
+                <option value="basic">Basic TRVs</option>
+                <option value="smart">Smart TRVs</option>
+                <option value="none">Manual Valves Only</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="subsection-total">
+            <span>Radiator System Subtotal:</span>
+            <span id="radiatorTotal" class="subtotal-value">£0</span>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 HOT WATER CYLINDER & CONTROLS
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Hot Water Cylinder & Controls</h2>
+          <div class="checkbox-group">
+            <input type="checkbox" id="includeHotWater" />
+            <label for="includeHotWater"
+              >Include hot water cylinder installation</label
+            >
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="cylinderSize">Cylinder Size (Litres)</label>
+              <select id="cylinderSize">
+                <option value="150">150L</option>
+                <option value="200">200L</option>
+                <option value="250">250L</option>
+                <option value="300">300L</option>
+                <option value="400">400L</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cylinderType">Cylinder Type</label>
+              <select id="cylinderType">
+                <option value="unvented">Unvented (Pressurised)</option>
+                <option value="vented">Vented (Open System)</option>
+                <option value="thermal_store">Thermal Store</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Control Systems -->
+          <div class="subsection">
+            <h3>Control Systems</h3>
+            <div class="checkbox-group">
+              <input type="checkbox" id="includeAdvancedControls" checked />
+              <label for="includeAdvancedControls"
+                >Include advanced control system</label
+              >
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="controlType">Control System Type</label>
+                <select id="controlType">
+                  <option value="basic">Basic Programmer/Thermostat</option>
+                  <option value="weather_comp">Weather Compensation</option>
+                  <option value="smart_home">Smart Home Integration</option>
+                  <option value="zone_control">Multi-Zone Control</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="numZones">Number of Heating Zones</label>
+                <input
+                  type="number"
+                  id="numZones"
+                  value="2"
+                  min="1"
+                  max="8"
+                  step="1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="subsection-total">
+            <span>Hot Water System Subtotal:</span>
+            <span id="hotWaterTotal" class="subtotal-value">£0</span>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 MATERIAL & LABOR RATES
+                 Customize these rates based on your costs
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Material & Labor Rates (£)</h2>
+
+          <!-- Piping Rates -->
+          <div class="subsection">
+            <h3>Piping Rates per Meter</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="copperRate">Copper Piping (£/m)</label>
+                <input
+                  type="number"
+                  id="copperRate"
+                  value="55"
+                  min="20"
+                  max="200"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="pexRate">PEX-AL-PEX Piping (£/m)</label>
+                <input
+                  type="number"
+                  id="pexRate"
+                  value="35"
+                  min="15"
+                  max="150"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="stainlessRate">Stainless Steel (£/m)</label>
+                <input
+                  type="number"
+                  id="stainlessRate"
+                  value="75"
+                  min="30"
+                  max="300"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="plasticRate">Plastic MDPE (£/m)</label>
+                <input
+                  type="number"
+                  id="plasticRate"
+                  value="25"
+                  min="10"
+                  max="100"
+                  step="1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Installation Rates -->
+          <div class="subsection">
+            <h3>Other Installation Rates</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="insulationRate">Pipe Insulation (£/m)</label>
+                <input
+                  type="number"
+                  id="insulationRate"
+                  value="12"
+                  min="5"
+                  max="50"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="drainageRate">Drainage Work (£/m)</label>
+                <input
+                  type="number"
+                  id="drainageRate"
+                  value="25"
+                  min="10"
+                  max="100"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="electricalRate">Electrical Work (£/m)</label>
+                <input
+                  type="number"
+                  id="electricalRate"
+                  value="35"
+                  min="15"
+                  max="150"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label for="floorLiftRate">Floor Lifting/Replace (£/sqm)</label>
+                <input
+                  type="number"
+                  id="floorLiftRate"
+                  value="45"
+                  min="20"
+                  max="150"
+                  step="1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Unit Installation Costs -->
+          <div class="subsection">
+            <h3>Unit Installation Costs</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="radiatorInstallCost"
+                  >Radiator Installation (£ each)</label
+                >
+                <input
+                  type="number"
+                  id="radiatorInstallCost"
+                  value="180"
+                  min="50"
+                  max="500"
+                  step="10"
+                />
+              </div>
+              <div class="form-group">
+                <label for="trvCost">TRV Cost (£ each)</label>
+                <input
+                  type="number"
+                  id="trvCost"
+                  value="45"
+                  min="15"
+                  max="200"
+                  step="5"
+                />
+              </div>
+              <div class="form-group">
+                <label for="cylinderInstallCost"
+                  >Cylinder Installation (£)</label
+                >
+                <input
+                  type="number"
+                  id="cylinderInstallCost"
+                  value="800"
+                  min="300"
+                  max="2000"
+                  step="50"
+                />
+              </div>
+              <div class="form-group">
+                <label for="controlInstallCost"
+                  >Control System Install (£)</label
+                >
+                <input
+                  type="number"
+                  id="controlInstallCost"
+                  value="400"
+                  min="150"
+                  max="1500"
+                  step="50"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 EQUIPMENT COSTS
+                 Customize based on supplier pricing
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Equipment Costs (£)</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="heatPumpCost">Heat Pump Unit Cost (£)</label>
+              <input
+                type="number"
+                id="heatPumpCost"
+                value="4500"
+                min="2000"
+                max="15000"
+                step="100"
+              />
+            </div>
+            <div class="form-group">
+              <label for="bufferTankCost">Buffer Tank Cost (£)</label>
+              <input
+                type="number"
+                id="bufferTankCost"
+                value="800"
+                min="200"
+                max="3000"
+                step="50"
+              />
+            </div>
+            <div class="form-group">
+              <label for="baseLaborCost">Base Labor Cost (£)</label>
+              <input
+                type="number"
+                id="baseLaborCost"
+                value="1200"
+                min="500"
+                max="5000"
+                step="100"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================
+                 PROFIT MARGIN & PRICING CONTROLS
+                 Set your business margins here
+                 ======================================== -->
+        <div class="section">
+          <h2 class="section-title">Profit Margin & Pricing Controls</h2>
+
+          <!-- Margin Strategy -->
+          <div class="subsection">
+            <h3>Margin Strategy</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="marginType">Margin Calculation Method</label>
+                <select id="marginType">
+                  <option value="markup">Markup on Cost</option>
+                  <option value="margin">Gross Margin %</option>
+                  <option value="fixed">Fixed Profit Amount</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="marginValue">Margin/Markup Value</label>
+                <input
+                  type="number"
+                  id="marginValue"
+                  value="35"
+                  min="0"
+                  max="200"
+                  step="1"
+                />
+                <small id="marginHelp">35% markup on total costs</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component-Specific Margins -->
+          <div class="subsection">
+            <h3>Component-Specific Margins</h3>
+            <div class="checkbox-group">
+              <input type="checkbox" id="useComponentMargins" />
+              <label for="useComponentMargins"
+                >Use different margins for different components</label
+              >
+            </div>
+            <div class="form-grid-2" id="componentMargins" style="opacity: 0.5">
+              <div class="form-group">
+                <label for="equipmentMargin">Equipment Margin (%)</label>
+                <input
+                  type="number"
+                  id="equipmentMargin"
+                  value="25"
+                  min="0"
+                  max="100"
+                  step="1"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="materialsMargin">Materials Margin (%)</label>
+                <input
+                  type="number"
+                  id="materialsMargin"
+                  value="40"
+                  min="0"
+                  max="100"
+                  step="1"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="laborMargin">Labor Margin (%)</label>
+                <input
+                  type="number"
+                  id="laborMargin"
+                  value="50"
+                  min="0"
+                  max="100"
+                  step="1"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="installationMargin">Installation Margin (%)</label>
+                <input
+                  type="number"
+                  id="installationMargin"
+                  value="45"
+                  min="0"
+                  max="100"
+                  step="1"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Business Overheads -->
+          <div class="subsection">
+            <h3>Business Overheads</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="overheadPercentage">Overhead Percentage (%)</label>
+                <input
+                  type="number"
+                  id="overheadPercentage"
+                  value="15"
+                  min="0"
+                  max="50"
+                  step="0.5"
+                />
+              </div>
+              <div class="form-group">
+                <label for="riskContingency">Risk Contingency (%)</label>
+                <input
+                  type="number"
+                  id="riskContingency"
+                  value="5"
+                  min="0"
+                  max="20"
+                  step="0.5"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Competitive Analysis -->
+          <div class="subsection">
+            <h3>Competitive Analysis</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="targetSellPrice">Target Selling Price (£)</label>
+                <input
+                  type="number"
+                  id="targetSellPrice"
+                  value="0"
+                  min="0"
+                  max="50000"
+                  step="100"
+                />
+                <small>Leave 0 for calculated price</small>
+              </div>
+              <div class="form-group">
+                <label for="competitorPrice">Competitor Price (£)</label>
+                <input
+                  type="number"
+                  id="competitorPrice"
+                  value="0"
+                  min="0"
+                  max="50000"
+                  step="100"
+                />
+                <small>For comparison analysis</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculate Button -->
+        <div style="text-align: center; margin: 30px 0">
+          <button class="calculate-btn" onclick="calculateQuote()">
+            Calculate Quote
+          </button>
+          <button
+            class="print-btn"
+            onclick="printQuote()"
+            style="margin-left: 15px"
+          >
+            Print Quote PDF
+          </button>
+        </div>
+
+        <!-- ========================================
+                 RESULTS SECTION
+                 ======================================== -->
+        <div class="section" id="resultsSection" style="display: none">
+          <h2 class="section-title">Quote Breakdown</h2>
+          <div class="results" id="results">
+            <!-- Results will be populated here by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./calculation.js"></script>
+    <script src="./lib/print.js"></script>
+  </body>
+</html>

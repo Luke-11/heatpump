@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Materials Admin</title>
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        background: #f3f4f6;
+      }
+      header {
+        background: #1f2937;
+        color: #f9fafb;
+        padding: 1.5rem 2rem;
+      }
+      main {
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 0 1.5rem 3rem;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.75rem;
+      }
+      h2 {
+        margin: 2.5rem 0 1rem;
+        font-size: 1.25rem;
+        color: #111827;
+      }
+      form {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 15px 35px -20px rgba(15, 23, 42, 0.45);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+      }
+      th,
+      td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      th {
+        text-align: left;
+        color: #6b7280;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 0.5rem 0.65rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        transition: border-color 120ms ease, box-shadow 120ms ease;
+      }
+      input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+      }
+      button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: none;
+        cursor: pointer;
+        border-radius: 9999px;
+        font-size: 0.95rem;
+        padding: 0.5rem 1.1rem;
+        transition: background 140ms ease;
+      }
+      button[type="submit"] {
+        background: #2563eb;
+        color: #f9fafb;
+        margin-top: 1.5rem;
+      }
+      button[type="submit"]:hover {
+        background: #1d4ed8;
+      }
+      .add-row {
+        background: #e0f2fe;
+        color: #0c4a6e;
+        margin-bottom: 0.75rem;
+      }
+      .add-row:hover {
+        background: #bae6fd;
+      }
+      .row-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .remove-row {
+        background: transparent;
+        color: #ef4444;
+        font-size: 1.35rem;
+        padding: 0.25rem 0.6rem;
+      }
+      .remove-row:hover {
+        color: #b91c1c;
+      }
+      .grid {
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .card {
+        background: #f9fafb;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+      }
+      .status {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.65rem;
+        display: none;
+      }
+      .status.ok {
+        display: block;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #34d399;
+      }
+      .status.err {
+        display: block;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fca5a5;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Materials Pricing Admin</h1>
+      <p>Review, tweak, and save the lookup values used by the calculator.</p>
+    </header>
+
+    <main>
+      <form id="materialsForm">
+        <section>
+          <h2>Pipe Rates (£ per metre)</h2>
+          <button
+            type="button"
+            class="add-row"
+            data-action="add-row"
+            data-section="pipeRates"
+          >
+            Add Pipe Material
+          </button>
+          <table class="kv-table" data-section="pipeRates">
+            <thead>
+              <tr>
+                <th>Material Key</th>
+                <th>Rate</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Radiator Unit Costs (£ each)</h2>
+          <button
+            type="button"
+            class="add-row"
+            data-action="add-row"
+            data-section="radiatorCosts"
+          >
+            Add Radiator Type
+          </button>
+          <table class="kv-table" data-section="radiatorCosts">
+            <thead>
+              <tr>
+                <th>Type Key</th>
+                <th>Cost</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section class="grid">
+          <div class="card">
+            <h2>Hot Water Cylinder Base Costs (£)</h2>
+            <button
+              type="button"
+              class="add-row"
+              data-action="add-row"
+              data-section="cylinderBase"
+            >
+              Add Cylinder Size
+            </button>
+            <table class="kv-table" data-section="cylinderBase">
+              <thead>
+                <tr>
+                  <th>Size Key</th>
+                  <th>Base Cost</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h2>Cylinder Type Multipliers</h2>
+            <button
+              type="button"
+              class="add-row"
+              data-action="add-row"
+              data-section="cylinderMultiplier"
+            >
+              Add Cylinder Type
+            </button>
+            <table class="kv-table" data-section="cylinderMultiplier">
+              <thead>
+                <tr>
+                  <th>Type Key</th>
+                  <th>Multiplier</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2>Control System Costs (£)</h2>
+          <button
+            type="button"
+            class="add-row"
+            data-action="add-row"
+            data-section="controlBase"
+          >
+            Add Control Type
+          </button>
+          <table class="kv-table" data-section="controlBase">
+            <thead>
+              <tr>
+                <th>Control Key</th>
+                <th>Base Cost</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="grid">
+            <label class="card">
+              <span>Zones Included Before Surcharge</span>
+              <input type="number" name="includedZones" min="0" step="1" />
+            </label>
+            <label class="card">
+              <span>Additional Zone Fee (£)</span>
+              <input type="number" name="extraZoneFee" min="0" step="0.01" />
+            </label>
+          </div>
+        </section>
+
+        <button type="submit">Save pricing data</button>
+        <div id="status" class="status" role="status"></div>
+      </form>
+    </main>
+
+    <template id="rowTemplate">
+      <tr>
+        <td><input type="text" name="key" placeholder="identifier" /></td>
+        <td>
+          <input type="number" name="value" step="0.01" placeholder="value" />
+        </td>
+        <td class="row-actions">
+          <button type="button" class="remove-row" title="Remove entry">
+            &times;
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="./lib/materials-admin.js"></script>
+  </body>
+</html>

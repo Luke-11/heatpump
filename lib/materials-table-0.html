@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Materials Data Preview</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        background: #f3f4f6;
+      }
+      h1 {
+        margin-bottom: 1.5rem;
+        color: #1f2937;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 12px 32px -18px rgba(15, 23, 42, 0.35);
+      }
+      th,
+      td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      th {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        background: #f9fafb;
+        color: #6b7280;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      .status {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Current Materials Prices</h1>
+    <div class="nav-buttons">
+      <a class="nav-button" href="../VHEATPUMPTOOL11.html"
+        >Back to Calculator</a
+      >
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="materialsTable">
+        <tr>
+          <td colspan="3">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="status" class="status"></div>
+
+    <script type="module">
+      const tableBody = document.getElementById("materialsTable");
+      const status = document.getElementById("status");
+
+      function addRow(category, key, value) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${category}</td>
+        <td>${key}</td>
+        <td>${typeof value === "number" ? value.toFixed(2) : value}</td>
+      `;
+        tableBody.appendChild(row);
+      }
+
+      function renderData(data) {
+        tableBody.innerHTML = "";
+        addRows("Pipe Rate", data.pipeRates);
+        addRows("Radiator", data.radiatorCosts);
+        addRows("Cylinder Base", data.cylinderCosts?.base ?? {});
+        addRows(
+          "Cylinder Multiplier",
+          data.cylinderCosts?.typeMultiplier ?? {}
+        );
+        addRows("Control Base", data.controlSystems?.base ?? {});
+        addRow(
+          "Control Settings",
+          "includedZones",
+          data.controlSystems?.includedZones ?? ""
+        );
+        addRow(
+          "Control Settings",
+          "extraZoneFee",
+          data.controlSystems?.extraZoneFee ?? ""
+        );
+      }
+
+      function addRows(category, entries) {
+        Object.entries(entries).forEach(([key, value]) =>
+          addRow(category, key, value)
+        );
+      }
+
+      fetch("./materials.json", { cache: "no-store" })
+        .then((res) => {
+          if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          renderData(data);
+          status.textContent = "Loaded from ./lib/materials.json";
+        })
+        .catch((err) => {
+          tableBody.innerHTML = `<tr><td colspan="3">Failed to load data.</td></tr>`;
+          status.textContent = err.message;
+          status.style.color = "#b91c1c";
+        });
+    </script>
+  </body>
+</html>

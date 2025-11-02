@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Materials Data Preview</title>
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        background: #f3f4f6;
+        color: #111827;
+      }
+
+      h1 {
+        margin-bottom: 1.5rem;
+      }
+
+      .nav-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1.5rem;
+      }
+
+      .nav-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.55rem 1.1rem;
+        background: #2563eb;
+        color: #f9fafb;
+        border-radius: 9999px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 160ms ease;
+      }
+
+      .nav-button:hover {
+        background: #1d4ed8;
+      }
+
+      .materials-cards {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .material-card {
+        background: #ffffff;
+        border-radius: 1rem;
+        box-shadow: 0 18px 45px -28px rgba(15, 23, 42, 0.5);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .material-card h2 {
+        margin: 0 0 1rem;
+        font-size: 1.1rem;
+        color: #0f172a;
+      }
+
+      .material-card table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .material-card th,
+      .material-card td {
+        padding: 0.6rem 0.4rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      .material-card th {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        color: #64748b;
+        background: #f8fafc;
+      }
+
+      .material-card tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .status {
+        margin-top: 1.25rem;
+        font-size: 0.95rem;
+        color: #475569;
+      }
+
+      .status.error {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Current Materials Prices</h1>
+
+    <div class="nav-buttons">
+      <a class="nav-button" href="../VHEATPUMPTOOL11.html">
+        Back to Calculator
+      </a>
+    </div>
+
+    <div id="materialsCards" class="materials-cards">
+      <div class="material-card">
+        <h2>Loading…</h2>
+        <p>Fetching data from materials.json</p>
+      </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script type="module">
+      const cardsContainer = document.getElementById("materialsCards");
+      const status = document.getElementById("status");
+
+      const currencyFormatter = new Intl.NumberFormat("en-GB", {
+        style: "currency",
+        currency: "GBP",
+        minimumFractionDigits: 2,
+      });
+
+      function formatCurrency(_key, value) {
+        const amount = Number(value);
+        return Number.isFinite(amount)
+          ? currencyFormatter.format(amount)
+          : value ?? "";
+      }
+
+      function formatMultiplier(_key, value) {
+        const multiplier = Number(value);
+        return Number.isFinite(multiplier)
+          ? `× ${multiplier.toFixed(2)}`
+          : value ?? "";
+      }
+
+      function formatControl(key, value) {
+        if (key === "includedZones") {
+          const count = Number(value);
+          return Number.isFinite(count) ? count : value ?? "";
+        }
+        return formatCurrency(key, value);
+      }
+
+      function renderTable(title, entries, formatter) {
+        const card = document.createElement("section");
+        card.className = "material-card";
+        card.innerHTML = `
+          <h2>${title}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        `;
+
+        const tbody = card.querySelector("tbody");
+
+        if (!entries || Object.keys(entries).length === 0) {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td colspan="2">No entries</td>`;
+          tbody.appendChild(row);
+        } else {
+          Object.entries(entries).forEach(([key, value]) => {
+            const row = document.createElement("tr");
+            const display = formatter ? formatter(key, value) : value ?? "";
+            row.innerHTML = `
+              <td>${key}</td>
+              <td>${display}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+
+        cardsContainer.appendChild(card);
+      }
+
+      function renderData(data) {
+        cardsContainer.innerHTML = "";
+
+        renderTable("Pipe Rates (£/m)", data.pipeRates, formatCurrency);
+        renderTable("Radiator Costs", data.radiatorCosts, formatCurrency);
+        renderTable(
+          "Cylinder Base Costs",
+          data.cylinderCosts?.base,
+          formatCurrency
+        );
+        renderTable(
+          "Cylinder Multipliers",
+          data.cylinderCosts?.typeMultiplier,
+          formatMultiplier
+        );
+        renderTable(
+          "Control System Base",
+          data.controlSystems?.base,
+          formatCurrency
+        );
+        renderTable(
+          "Control Settings",
+          {
+            includedZones: data.controlSystems?.includedZones,
+            extraZoneFee: data.controlSystems?.extraZoneFee,
+          },
+          formatControl
+        );
+      }
+
+      fetch("./materials.json", { cache: "no-store" })
+        .then((res) => {
+          if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          renderData(data);
+          status.textContent = "Loaded from ./lib/materials.json";
+        })
+        .catch((err) => {
+          cardsContainer.innerHTML = "";
+          status.textContent = `Failed to load data: ${err.message}`;
+          status.classList.add("error");
+        });
+    </script>
+  </body>
+</html>

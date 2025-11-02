@@ -1,0 +1,76 @@
+/* Tiles grid */
+.main-content {
+  display: block;
+}
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* Tile visuals */
+.section.tile {
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(20, 30, 48, 0.06);
+  overflow: hidden;
+  background: #ffffff;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  border: 1px solid rgba(10, 10, 10, 0.03);
+}
+.section.tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(20, 30, 48, 0.08);
+}
+
+/* Summary bar always visible */
+.tile-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #f7fafc, #ffffff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  user-select: none;
+}
+.tile-summary .label {
+  font-weight: 600;
+  color: #233049;
+}
+.tile-summary .value {
+  font-weight: 700;
+  color: #0b63c9;
+}
+
+/* Details area hides while collapsed */
+.tile-details {
+  display: none;
+  padding: 12px 16px;
+}
+.section.tile.expanded .tile-details {
+  display: block;
+}
+
+/* Keep original section title styling inside details */
+.section .section-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Small chevron */
+.tile-summary .chev {
+  transition: transform 0.18s ease;
+  color: #546986;
+}
+.section.tile.expanded .tile-summary .chev {
+  transform: rotate(90deg);
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .tiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
