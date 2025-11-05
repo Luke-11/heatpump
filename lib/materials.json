@@ -34,5 +34,7 @@
     },
     "includedZones": 2,
     "extraZoneFee": 150
-  }
+  },
+  "condensateDrain": 5,
+  "electricalCables": 35
 }
