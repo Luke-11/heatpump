@@ -4,6 +4,8 @@ import {
   getRadiatorCost,
   getCylinderCost,
   getControlSystemCost,
+  getCondensateDrainCost,
+  getElectricalCablesCost,
 } from "./lib/materials.js";
 // import { printQuote as printQuoteLib } from "./lib/print.js"; // optional
 
@@ -527,10 +529,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const primaryMaterialRate = getMaterialRate(primaryMaterial);
       const primaryPipingCost = primaryPiping * primaryMaterialRate;
       const primaryInsulationCost = primaryPiping * insulationRate;
-      const primaryCircuitTotal = primaryPipingCost + primaryInsulationCost;
+      const primaryCircuitTotal = primaryPipingCost; // + primaryInsulationCost;
       document.getElementById(
         "primaryCircuitTotal"
-      ).textContent = `£${primaryCircuitTotal.toLocaleString()}`;
+      ).textContent = `${primaryPiping}x£${primaryMaterialRate} = £${primaryCircuitTotal.toLocaleString()}`;
 
       console.log("primaryCircuitTotal", primaryCircuitTotal);
       // Secondary Circuit Total
@@ -542,31 +544,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const secondaryMaterialRate = getMaterialRate(secondaryMaterial);
       const secondaryPipingCost = secondaryPiping * secondaryMaterialRate;
       const secondaryInsulationCost = secondaryPiping * insulationRate;
-      const secondaryCircuitTotal =
-        secondaryPipingCost + secondaryInsulationCost;
+      const secondaryCircuitTotal = secondaryPipingCost; //+ secondaryInsulationCost;
       document.getElementById(
         "secondaryCircuitTotal"
-      ).textContent = `£${secondaryCircuitTotal.toLocaleString()}`;
+      ).textContent = `${secondaryPiping} x £${secondaryMaterialRate} = £${secondaryCircuitTotal.toLocaleString()}`;
       console.log("secondaryCircuitTotal", secondaryCircuitTotal);
       // Drainage Work Total
       const condensateDrain =
         parseFloat(document.getElementById("condensateDrain").value) || 0;
-      const drainageRate =
-        parseFloat(document.getElementById("drainageRate").value) || 0;
+      const drainageRate = getCondensateDrainCost();
+      // parseFloat(document.getElementById("drainageRate").value) || 0;
       const drainageTotal = condensateDrain * drainageRate;
       document.getElementById(
         "drainageTotal"
-      ).textContent = `£${drainageTotal.toLocaleString()}`;
+      ).textContent = `${condensateDrain}x £${drainageRate} =  £${drainageTotal.toLocaleString()}`;
 
       // Electrical Work Total
       const electricalCabling =
         parseFloat(document.getElementById("electricalCabling").value) || 0;
-      const electricalRate =
-        parseFloat(document.getElementById("electricalRate").value) || 0;
+      const electricalRate = getElectricalCablesCost();
+      //parseFloat(document.getElementById("electricalRate").value) || 0;
       const electricalTotal = electricalCabling * electricalRate;
       document.getElementById(
         "electricalTotal"
-      ).textContent = `£${electricalTotal.toLocaleString()}`;
+      ).textContent = `${electricalCabling} x £${electricalRate} = £${electricalTotal.toLocaleString()}`;
 
       // Floor Work Total
       const includeFloorWork =
@@ -578,14 +579,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const floorWorkTotal = includeFloorWork
         ? floorAreaLifted * floorLiftRate
         : 0;
-      document.getElementById(
-        "floorWorkTotal"
-      ).textContent = `£${floorWorkTotal.toLocaleString()}`;
+      document.getElementById("floorWorkTotal").textContent = includeFloorWork
+        ? `${floorAreaLifted.toLocaleString()} x £${floorLiftRate.toLocaleString()} = £${floorWorkTotal.toLocaleString()}`
+        : `£0`;
 
       // Radiator System Total
       const includeRadiators =
         document.getElementById("includeRadiators").checked;
       let radiatorTotal = 0;
+      let radiatorUnitCost = 0;
+      let trvCosts = 0;
       if (includeRadiators) {
         const numRadiators =
           parseFloat(document.getElementById("numRadiators").value) || 0;
@@ -605,11 +608,13 @@ document.addEventListener("DOMContentLoaded", () => {
             : 0;
 
         radiatorTotal = radiatorCosts + radiatorInstallCosts + trvCosts;
-      }
-      document.getElementById(
-        "radiatorTotal"
-      ).textContent = `£${radiatorTotal.toLocaleString()}`;
 
+        document.getElementById(
+          "radiatorTotal"
+        ).textContent = `${numRadiators} x (£${radiatorUnitCost} + £${radiatorInstallCost} + £${trvCost}) = £${radiatorTotal.toLocaleString()}`;
+      } else {
+        document.getElementById("radiatorTotal").textContent = `£0`;
+      }
       // Hot Water System & Controls Total
       const includeHotWater =
         document.getElementById("includeHotWater").checked;
@@ -777,136 +782,136 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.toggleFieldsets = toggleFieldsets;
 
-  function calculateSubtotals() {
-    // Primary Circuit
-    const primaryPiping =
-      parseFloat(document.getElementById("primaryPiping").value) || 0;
-    const primaryMaterial = document.getElementById(
-      "primaryPipeMaterial"
-    ).value;
-    const insulationRate =
-      parseFloat(document.getElementById("insulationRate").value) || 0;
-    const primaryMaterialRate = getMaterialRate(primaryMaterial);
+  // function calculateSubtotals() {
+  //   // Primary Circuit
+  //   const primaryPiping =
+  //     parseFloat(document.getElementById("primaryPiping").value) || 0;
+  //   const primaryMaterial = document.getElementById(
+  //     "primaryPipeMaterial"
+  //   ).value;
+  //   const insulationRate =
+  //     parseFloat(document.getElementById("insulationRate").value) || 0;
+  //   const primaryMaterialRate = getMaterialRate(primaryMaterial);
 
-    const primaryTotal =
-      primaryPiping * primaryMaterialRate + primaryPiping * insulationRate;
-    document.getElementById(
-      "primaryCircuitTotal"
-    ).textContent = `£${primaryTotal.toLocaleString()}`;
+  //   const primaryTotal =
+  //     primaryPiping * primaryMaterialRate + primaryPiping * insulationRate;
+  //   document.getElementById(
+  //     "primaryCircuitTotal"
+  //   ).textContent = `£${primaryTotal.toLocaleString()}`;
 
-    // Secondary Circuit
-    const secondaryPiping =
-      parseFloat(document.getElementById("secondaryPiping").value) || 0;
-    const secondaryMaterial = document.getElementById(
-      "secondaryPipeMaterial"
-    ).value;
-    const secondaryMaterialRate = getMaterialRate(secondaryMaterial);
+  //   // Secondary Circuit
+  //   const secondaryPiping =
+  //     parseFloat(document.getElementById("secondaryPiping").value) || 0;
+  //   const secondaryMaterial = document.getElementById(
+  //     "secondaryPipeMaterial"
+  //   ).value;
+  //   const secondaryMaterialRate = getMaterialRate(secondaryMaterial);
 
-    const secondaryTotal =
-      secondaryPiping * secondaryMaterialRate +
-      secondaryPiping * insulationRate;
-    document.getElementById(
-      "secondaryCircuitTotal"
-    ).textContent = `£${secondaryTotal.toLocaleString()}`;
+  //   const secondaryTotal =
+  //     secondaryPiping * secondaryMaterialRate +
+  //     secondaryPiping * insulationRate;
+  //   document.getElementById(
+  //     "secondaryCircuitTotal"
+  //   ).textContent = `£${secondaryTotal.toLocaleString()}`;
 
-    // Drainage Work Total
-    const condensateDrain =
-      parseFloat(document.getElementById("condensateDrain").value) || 0;
-    const drainageRate =
-      parseFloat(document.getElementById("drainageRate").value) || 0;
-    const drainageTotal = condensateDrain * drainageRate;
-    document.getElementById(
-      "drainageTotal"
-    ).textContent = `£${drainageTotal.toLocaleString()}`;
+  //   // Drainage Work Total
+  //   const condensateDrain =
+  //     parseFloat(document.getElementById("condensateDrain").value) || 0;
+  //   const drainageRate =
+  //     parseFloat(document.getElementById("drainageRate").value) || 0;
+  //   const drainageTotal = condensateDrain * drainageRate;
+  //   document.getElementById(
+  //     "drainageTotal"
+  //   ).textContent = `£${drainageTotal.toLocaleString()}`;
 
-    // Electrical Work Total
-    const electricalCabling =
-      parseFloat(document.getElementById("electricalCabling").value) || 0;
-    const electricalRate =
-      parseFloat(document.getElementById("electricalRate").value) || 0;
-    const electricalTotal = electricalCabling * electricalRate;
-    document.getElementById(
-      "electricalTotal"
-    ).textContent = `£${electricalTotal.toLocaleString()}`;
+  //   // Electrical Work Total
+  //   const electricalCabling =
+  //     parseFloat(document.getElementById("electricalCabling").value) || 0;
+  //   const electricalRate =
+  //     parseFloat(document.getElementById("electricalRate").value) || 0;
+  //   const electricalTotal = electricalCabling * electricalRate;
+  //   document.getElementById(
+  //     "electricalTotal"
+  //   ).textContent = `£${electricalTotal.toLocaleString()}`;
 
-    // Floor Work Total
-    const includeFloorWork =
-      document.getElementById("includeFloorWork").checked;
-    const floorAreaLifted =
-      parseFloat(document.getElementById("floorAreaLifted").value) || 0;
-    const floorLiftRate =
-      parseFloat(document.getElementById("floorLiftRate").value) || 0;
-    const floorWorkTotal = includeFloorWork
-      ? floorAreaLifted * floorLiftRate
-      : 0;
-    document.getElementById(
-      "floorWorkTotal"
-    ).textContent = `£${floorWorkTotal.toLocaleString()}`;
+  //   // Floor Work Total
+  //   const includeFloorWork =
+  //     document.getElementById("includeFloorWork").checked;
+  //   const floorAreaLifted =
+  //     parseFloat(document.getElementById("floorAreaLifted").value) || 0;
+  //   const floorLiftRate =
+  //     parseFloat(document.getElementById("floorLiftRate").value) || 0;
+  //   const floorWorkTotal = includeFloorWork
+  //     ? floorAreaLifted * floorLiftRate
+  //     : 0;
+  //   document.getElementById(
+  //     "floorWorkTotal"
+  //   ).textContent = `£${floorWorkTotal.toLocaleString()}`;
 
-    // Radiator System Total
-    const includeRadiators =
-      document.getElementById("includeRadiators").checked;
-    let radiatorTotal = 0;
-    if (includeRadiators) {
-      const numRadiators =
-        parseFloat(document.getElementById("numRadiators").value) || 0;
-      const radiatorType = document.getElementById("radiatorType").value;
-      const trvInstall = document.getElementById("trvInstall").value;
-      const radiatorInstallCost =
-        parseFloat(document.getElementById("radiatorInstallCost").value) || 0;
-      const trvCost = parseFloat(document.getElementById("trvCost").value) || 0;
+  //   // Radiator System Total
+  //   const includeRadiators =
+  //     document.getElementById("includeRadiators").checked;
+  //   let radiatorTotal = 0;
+  //   if (includeRadiators) {
+  //     const numRadiators =
+  //       parseFloat(document.getElementById("numRadiators").value) || 0;
+  //     const radiatorType = document.getElementById("radiatorType").value;
+  //     const trvInstall = document.getElementById("trvInstall").value;
+  //     const radiatorInstallCost =
+  //       parseFloat(document.getElementById("radiatorInstallCost").value) || 0;
+  //     const trvCost = parseFloat(document.getElementById("trvCost").value) || 0;
 
-      const radiatorUnitCost = getRadiatorCost(radiatorType);
-      const radiatorCosts = numRadiators * radiatorUnitCost;
-      const radiatorInstallCosts = numRadiators * radiatorInstallCost;
-      const trvCosts =
-        trvInstall !== "none"
-          ? numRadiators * (trvInstall === "smart" ? trvCost * 2 : trvCost)
-          : 0;
+  //     const radiatorUnitCost = getRadiatorCost(radiatorType);
+  //     const radiatorCosts = numRadiators * radiatorUnitCost;
+  //     const radiatorInstallCosts = numRadiators * radiatorInstallCost;
+  //     const trvCosts =
+  //       trvInstall !== "none"
+  //         ? numRadiators * (trvInstall === "smart" ? trvCost * 2 : trvCost)
+  //         : 0;
 
-      radiatorTotal = radiatorCosts + radiatorInstallCosts + trvCosts;
-    }
-    document.getElementById(
-      "radiatorTotal"
-    ).textContent = `£${radiatorTotal.toLocaleString()}`;
+  //     radiatorTotal = radiatorCosts + radiatorInstallCosts + trvCosts;
+  //   }
+  //   document.getElementById(
+  //     "radiatorTotal"
+  //   ).textContent = `£${radiatorTotal.toLocaleString()}`;
 
-    // Hot Water System & Controls Total
-    const includeHotWater = document.getElementById("includeHotWater").checked;
-    const includeAdvancedControls = document.getElementById(
-      "includeAdvancedControls"
-    ).checked;
-    let hotWaterTotal = 0;
+  //   // Hot Water System & Controls Total
+  //   const includeHotWater = document.getElementById("includeHotWater").checked;
+  //   const includeAdvancedControls = document.getElementById(
+  //     "includeAdvancedControls"
+  //   ).checked;
+  //   let hotWaterTotal = 0;
 
-    // Calculate hot water costs
-    if (includeHotWater) {
-      const cylinderSize = document.getElementById("cylinderSize").value;
-      const cylinderType = document.getElementById("cylinderType").value;
-      const cylinderInstallCost =
-        parseFloat(document.getElementById("cylinderInstallCost").value) || 0;
-      const cylinderCost = getCylinderCost(cylinderSize, cylinderType);
-      hotWaterTotal = cylinderCost + cylinderInstallCost;
-    }
+  //   // Calculate hot water costs
+  //   if (includeHotWater) {
+  //     const cylinderSize = document.getElementById("cylinderSize").value;
+  //     const cylinderType = document.getElementById("cylinderType").value;
+  //     const cylinderInstallCost =
+  //       parseFloat(document.getElementById("cylinderInstallCost").value) || 0;
+  //     const cylinderCost = getCylinderCost(cylinderSize, cylinderType);
+  //     hotWaterTotal = cylinderCost + cylinderInstallCost;
+  //   }
 
-    // Add control system costs
-    const controlType = document.getElementById("controlType").value;
-    const numZones = parseFloat(document.getElementById("numZones").value) || 0;
-    const controlInstallCost =
-      parseFloat(document.getElementById("controlInstallCost").value) || 0;
+  //   // Add control system costs
+  //   const controlType = document.getElementById("controlType").value;
+  //   const numZones = parseFloat(document.getElementById("numZones").value) || 0;
+  //   const controlInstallCost =
+  //     parseFloat(document.getElementById("controlInstallCost").value) || 0;
 
-    const controlSystemCost = includeAdvancedControls
-      ? getControlSystemCost(controlType, numZones)
-      : 200; // 200 is base cost for basic controls
-    const controlSystemInstallCost = includeAdvancedControls
-      ? controlInstallCost
-      : 100; // 100 is base installation cost
+  //   const controlSystemCost = includeAdvancedControls
+  //     ? getControlSystemCost(controlType, numZones)
+  //     : 200; // 200 is base cost for basic controls
+  //   const controlSystemInstallCost = includeAdvancedControls
+  //     ? controlInstallCost
+  //     : 100; // 100 is base installation cost
 
-    // Add control costs to total
-    hotWaterTotal += controlSystemCost + controlSystemInstallCost;
+  //   // Add control costs to total
+  //   hotWaterTotal += controlSystemCost + controlSystemInstallCost;
 
-    document.getElementById(
-      "hotWaterTotal"
-    ).textContent = `£${hotWaterTotal.toLocaleString()}`;
-  }
+  //   document.getElementById(
+  //     "hotWaterTotal"
+  //   ).textContent = `£${hotWaterTotal.toLocaleString()}`;
+  // }
 
-  window.calculateSubtotals = calculateSubtotals;
+  // window.calculateSubtotals = calculateSubtotals;
 })();
