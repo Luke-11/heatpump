@@ -48,6 +48,7 @@
             </div>
           </div>  
         </div>
+        <div class="section-grid">
         <div class="section">
           <h2 class="section-title">System Configuration</h2>
           <div class="form-grid">
@@ -93,6 +94,55 @@
             </div>
           </div>
         </div>
+        <!-- ========================================
+                 EQUIPMENT COSTS
+                 Customize based on supplier pricing
+                 ======================================== -->
+          <div class="section">
+            <h2 class="section-title">Equipment Costs (£)</h2>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="heatPumpCost">Heat Pump Unit Cost (£)</label>
+                <input
+                  type="number"
+                  id="heatPumpCost"
+                  value="4500"
+                  min="2000"
+                  max="15000"
+                  step="100"
+                />
+              </div>
+              <div class="form-group">
+                <label for="bufferTankCost">Buffer Tank Cost (£)</label>
+                <input
+                  type="number"
+                  id="bufferTankCost"
+                  value="800"
+                  min="200"
+                  max="3000"
+                  step="50"
+                />
+              </div>
+              <div class="form-group">
+                <label for="baseLaborCost">Base Labor Cost (£)</label>
+                <input
+                  type="number"
+                  id="baseLaborCost"
+                  value="1200"
+                  min="500"
+                  max="5000"
+                  step="100"
+                />
+              </div>
+            </div>
+           <!-- Equipment subtotal -->
+              <div class="subsection-total">
+                <span>Equipment Subtotal:</span>
+                <span id="equipmentTotal" class="subtotal-value">£0</span>
+              </div>
+            </div>
+          </div>
+          </div>
 
         <!-- ========================================
                  PIPING MATERIALS & INSTALLATION
@@ -398,7 +448,7 @@
                  Customize these rates based on your costs
                  ======================================== -->
           <div class="section">
-            <h2 class="section-title">Material & Labor Rates (£)</h2>
+            <h2 class="section-title">Labor Rates (£)</h2>
             <div class="section-grid">
               <!-- Piping Rates -->
               <div class="subsection">
@@ -563,10 +613,11 @@
             </div>
           </div>
 
-          <!-- ========================================
+          <!--  ========================================
                  EQUIPMENT COSTS
                  Customize based on supplier pricing
                  ======================================== -->
+          <!--
           <div class="section">
             <h2 class="section-title">Equipment Costs (£)</h2>
             <div class="form-grid">
@@ -604,7 +655,7 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- ========================================
                  PROFIT MARGIN & PRICING CONTROLS

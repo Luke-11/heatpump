@@ -217,6 +217,16 @@
           },
           formatCurrency
         );
+        renderTable(
+          "Complexity Multiplier",
+          data.complexityMultiplier,
+          formatMultiplier
+        );
+        renderTable(
+          "System Multiplier",
+          data.systemMultiplier,
+          formatMultiplier
+        );
       }
 
       fetch("./materials.json", { cache: "no-store" })

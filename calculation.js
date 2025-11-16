@@ -6,6 +6,8 @@ import {
   getControlSystemCost,
   getCondensateDrainCost,
   getElectricalCablesCost,
+  getComplexityMultiplier,
+  getSystemMultiplier,
 } from "./lib/materials.js";
 // import { printQuote as printQuoteLib } from "./lib/print.js"; // optional
 
@@ -518,6 +520,29 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   window.updateSubsectionTotals = function () {
     try {
+      //Equipment Total
+      const heatPumpCost =
+        parseFloat(document.getElementById("heatPumpCost").value) || 0;
+      const bufferTankCost =
+        parseFloat(document.getElementById("bufferTankCost").value) || 0;
+      const baseLaborCost =
+        parseFloat(document.getElementById("baseLaborCost").value) || 0;
+
+      const installationComplexity = document.getElementById(
+        "installationComplexity"
+      ).value;
+      const systemType = document.getElementById("systemType").value;
+      const complexityMultiplier = getComplexityMultiplier(
+        installationComplexity
+      );
+      const systemMultiplier = getSystemMultiplier(systemType);
+      const equipmentTotal =
+        heatPumpCost +
+        bufferTankCost +
+        systemMultiplier * complexityMultiplier * baseLaborCost;
+      document.getElementById(
+        "equipmentTotal"
+      ).textContent = `£${heatPumpCost.toLocaleString()}+£${bufferTankCost.toLocaleString()}+${complexityMultiplier} x ${systemMultiplier} x £${baseLaborCost.toLocaleString()}=£${equipmentTotal.toLocaleString()}`;
       // Primary Circuit Total
       const primaryMaterial = document.getElementById(
         "primaryPipeMaterial"
