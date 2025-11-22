@@ -202,10 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
       cylinderCost +
       controlSystemCost;
     const materialsSubtotal =
-      primaryPipingCost + secondaryPipingCost + insulationCost + trvCosts;
+      primaryPipingCost + secondaryPipingCost + trvCosts;
     const installationSubtotal =
       drainageCost +
       electricalCost +
+      insulationCost +
       floorWorkCost +
       radiatorInstallCosts +
       cylinderInstallationCost +
@@ -355,10 +356,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="result-item">
                     <span class="result-label">Secondary Piping <span class="unit-suffix">(${secondaryPiping}m ${secondaryMaterial})</span></span>
                     <span class="result-value">£${secondaryPipingCost.toLocaleString()}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Pipe Insulation <span class="unit-suffix">(${totalPiping}m @ £${insulationRate}/m)</span></span>
-                    <span class="result-value">£${insulationCost.toLocaleString()}</span>
                 </div>`;
 
     if (trvCosts > 0) {
@@ -378,6 +375,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="result-item">
                     <span class="result-label">Electrical Work <span class="unit-suffix">(${electricalCabling}m @ £${electricalRate}/m)</span></span>
                     <span class="result-value">£${electricalCost.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Pipe Insulation <span class="unit-suffix">(${totalPiping}m @ £${insulationRate}/m)</span></span>
+                    <span class="result-value">£${insulationCost.toLocaleString()}</span>
                 </div>`;
 
     if (includeFloorWork && floorWorkCost > 0) {
