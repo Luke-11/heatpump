@@ -2,6 +2,7 @@
 import {
   getMaterialRate,
   getRadiatorCost,
+  getValveCost,
   getCylinderCost,
   getControlSystemCost,
   getCondensateDrainCost,
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const radiatorInstallCost = parseFloat(
       document.getElementById("radiatorInstallCost").value
     );
-    const trvCost = parseFloat(document.getElementById("trvCost").value);
+    // const trvCost = parseFloat(document.getElementById("trvCost").value);
     const cylinderInstallCost = parseFloat(
       document.getElementById("cylinderInstallCost").value
     );
@@ -146,10 +147,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (includeRadiators) {
       radiatorCosts = numRadiators * getRadiatorCost(radiatorType);
       radiatorInstallCosts = numRadiators * radiatorInstallCost;
-      if (trvInstall !== "none") {
-        const trvPrice = trvInstall === "smart" ? trvCost * 2 : trvCost;
-        trvCosts = numRadiators * trvPrice;
-      }
+      trvCosts = numRadiators * getValveCost(trvInstall);
+      // if (trvInstall !== "none") {
+      //   const trvPrice = trvInstall === "smart" ? trvCost * 2 : trvCost;
+      //   trvCosts = numRadiators * trvPrice;
+      // }
     }
 
     // ===== HOT WATER CYLINDER COSTS =====
@@ -624,16 +626,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const trvInstall = document.getElementById("trvInstall").value;
         const radiatorInstallCost =
           parseFloat(document.getElementById("radiatorInstallCost").value) || 0;
-        const trvCost =
-          parseFloat(document.getElementById("trvCost").value) || 0;
+        // const trvCost =
+        //   parseFloat(document.getElementById("trvCost").value) || 0;
 
         const radiatorUnitCost = getRadiatorCost(radiatorType);
         const radiatorCosts = numRadiators * radiatorUnitCost;
         const radiatorInstallCosts = numRadiators * radiatorInstallCost;
-        const trvCosts =
-          trvInstall !== "none"
-            ? numRadiators * (trvInstall === "smart" ? trvCost * 2 : trvCost)
-            : 0;
+        const trvCost = getValveCost(trvInstall);
+        const trvCosts = numRadiators * trvCost;
+        // trvInstall !== "none"
+        //   ? numRadiators * (trvInstall === "smart" ? trvCost * 2 : trvCost)
+        //   : 0;
 
         radiatorTotal = radiatorCosts + radiatorInstallCosts + trvCosts;
 
@@ -650,14 +653,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "includeAdvancedControls"
       ).checked;
       let hotWaterTotal = 0;
-
+      let cylinderCost = 0;
+      let cylinderInstallCost = 0;
       // Calculate hot water costs
       if (includeHotWater) {
         const cylinderSize = document.getElementById("cylinderSize").value;
         const cylinderType = document.getElementById("cylinderType").value;
-        const cylinderInstallCost =
+        cylinderInstallCost =
           parseFloat(document.getElementById("cylinderInstallCost").value) || 0;
-        const cylinderCost = getCylinderCost(cylinderSize, cylinderType);
+        cylinderCost = getCylinderCost(cylinderSize, cylinderType);
         hotWaterTotal = cylinderCost + cylinderInstallCost;
       }
 
@@ -680,8 +684,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById(
         "hotWaterTotal"
-      ).textContent = `£${hotWaterTotal.toLocaleString()}`;
+      ).textContent = `£${cylinderCost}+£${cylinderInstallCost} + £${controlSystemCost} + £${controlSystemInstallCost} = £${hotWaterTotal.toLocaleString()}`;
       console.log("hotWaterTotal", hotWaterTotal);
+      // Piping Labor Total
+      const pipingLaborRate =
+        parseFloat(document.getElementById("pipeLaborRate").value) || 0;
+      const insulationLabor =
+        parseFloat(document.getElementById("insulationRate").value) || 0;
+      const pipingLaborTotal =
+        (primaryPiping + secondaryPiping) * (pipingLaborRate + insulationLabor);
+      document.getElementById(
+        "pipingLabor"
+      ).textContent = `(${primaryPiping}m+${secondaryPiping}m) *(£${pipingLaborRate}+£${insulationLabor})=£${pipingLaborTotal}`;
+      // OtherLabor Total
+      const electricalLaborRate =
+        document.getElementById("electricalRate").value || 0;
+      const drainageLaborRate =
+        document.getElementById("drainageRate").value || 0;
+      const otherLaborTotal =
+        electricalLaborRate * electricalCabling +
+        drainageLaborRate * condensateDrain;
+      document.getElementById(
+        "otherLabor"
+      ).textContent = `£${drainageLaborRate} x ${condensateDrain}m +£${electricalLaborRate} x ${electricalCabling}m  = £${otherLaborTotal.toLocaleString()}`;
     } catch (error) {
       console.error("Error in updateSubsectionTotals:", error);
     }
