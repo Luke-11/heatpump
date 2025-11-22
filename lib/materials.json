@@ -11,6 +11,11 @@
     "premium": 280,
     "designer": 450
   },
+  "radiatorValveCost": {
+    "basic": 40,
+    "none": 20,
+    "smart": 80
+  },
   "cylinderCosts": {
     "base": {
       "150": 600,

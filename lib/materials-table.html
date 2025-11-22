@@ -187,6 +187,11 @@
         renderTable("Pipe Rates (£/m)", data.pipeRates, formatCurrency);
         renderTable("Radiator Costs", data.radiatorCosts, formatCurrency);
         renderTable(
+          "Radiator Valve Costs",
+          data.radiatorValveCost,
+          formatCurrency
+        );
+        renderTable(
           "Cylinder Base Costs",
           data.cylinderCosts?.base,
           formatCurrency

@@ -337,13 +337,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="result-value">£${cylinderCost.toLocaleString()}</span>
                 </div>`;
     }
-
-    resultsHTML += `
+    if (includeAdvancedControls) {
+      resultsHTML += `
                 <div class="result-item">
                     <span class="result-label">Control System <span class="unit-suffix">(${controlType}, ${numZones} zones)</span></span>
                     <span class="result-value">£${controlSystemCost.toLocaleString()}</span>
-                </div>
-
+                </div> `;
+    }
+    resultsHTML += `
                 <div class="category-header">Materials</div>
                 <div class="result-item">
                     <span class="result-label">Primary Piping <span class="unit-suffix">(${primaryPiping}m ${primaryMaterial})</span></span>
@@ -400,12 +401,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="result-value">£${cylinderInstallationCost.toLocaleString()}</span>
                 </div>`;
     }
-
-    resultsHTML += `
+    if (includeAdvancedControls) {
+      resultsHTML += `
                 <div class="result-item">
                     <span class="result-label">Control System Installation</span>
                     <span class="result-value">£${controlSystemInstallCost.toLocaleString()}</span>
-                </div>
+                </div>`;
+    }
+    resultsHTML += `
                 <div class="result-item">
                     <span class="result-label">Base Labor Cost <span class="unit-suffix">(${installationComplexity}, ${systemType})</span></span>
                     <span class="result-value">£${adjustedLaborCost.toLocaleString()}</span>
